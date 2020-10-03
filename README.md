@@ -203,3 +203,68 @@ If you decide to build this, I’d suggest to do it in the following stages:
 Construction details
 
 <img src=/images/SFX%20Nano.jpg>
+<img src=/images/NanoSFX.png>
+
+Start with the Nano, the 74HC595 shift register and the C64 cartridge connector.
+You can get the connector from a dead C64.  I found a butane blow torch and a helping pair of hands removed them quickly and easily.
+
+Solder some female header sockets to mount the Nano, Then use a DIL socket for the 74HC595 shift register.  Observe which way is up.
+Now solder the edge connector, make sure all the prongs fit through the holes.
+
+Now start wiring up. Start by connecting the outputs from the shift register to the D0 – D7 data lines of the connector.Next connect all Gnd lines of the connector together and feed back to the ‘595 Gnd and finally to the Nano Gnd.   
+Wire +5V of the edge connector to Nano Vin.
+Wire I/O2 and R/W of the C64 connector to Gnd.
+
+Wire the three lines from the Nano to the ‘595 as per below:
+
+Nano pin    74HC595
+D10        12                
+D11        14                
+D13        11
+
+Wire the +5V supply to Vin on the Nano.  Also wire Pin 10 of the ‘595 to +5V and Pin 13 (‘595) to Gnd.
+
+Wire D8 from the Nano directly to the Reset pin on the C64 connector.
+Wire D9 from the Nano directly to the A4 pin on the C64 connector.
+Wire D6 from the Nano to the D_Clock pin on the C64 connector.
+
+
+At this stage, you should be able to run the Test tune with a genuine SFX Cartridge.
+If not, double check your wiring before continuing.
+
+Add the I2C components.
+I2C is only four wires and two of them are for power.
+Start with the LCD, there are many different types of LCD and you are advised to get yourself familiar with the one you have but the basic installation and testing steps will be provided here.
+You’ll probably mount the display off board and will therefore use 4 male header pins and a lead.
+Solder in the pins and connect them as per the connector on the LCD backpack, that way you can just make a straight through lead which is easier.
+Gnd and +5V is easy.
+The other two are SDA and SCL which are tapped from the Nano pins A4 and A5.
+Connect the LCD and run the I2C scanner found at this page:
+http://gammon.com.au/i2c
+
+If you can see the address of the device, you may proceed, if not, go back and check what is wrong.
+Now get yourself familiar with the constructor for your LCD, you will need this later on.
+
+Next, solder in the EEPROM. Again use a DIL socket.  Pins 1,2,3,4 & 7 to Gnd. Pin 8 to +5V. Pin 5 to Nano A4 and Pin 6 to Nano A5.
+Insert the EEPROM chip, make sure it’s the right way up.
+
+Run the I2C scanner sketch again and you should see your device show up at address 0x50.  If you still have the LCD attached, you should see two devices.
+If not, go back and check your wiring.
+
+Next solder in the two push buttons, these are simply wired between Nano Pins A0, A1 and Gnd.  You may want to mount these off board so use male pin headers and a connecting lead.
+
+You can now program the EEPROM.  There is a sketch included that needs to be run 4 times, each time with a different start address and set of Data.
+Make sure you have the serial monitor open!
+
+At this stage, load up the SFX sketch.
+
+Now add the MIDI input circuit.
+You can use a 6N138 or 6N139.  Take note of the protection diode orientation.  The little line needs to be pointing towards Pin 2 of the Opto isolator chip.
+Also take care with the resistors on the output side, one is connected to Gnd the other to +5V.  Don’t forget to connect the output to the Nano Rx pin and also check that the MIDI Input socket is wired correctly.      
+
+Connect everything up, MIDI keyboard, SFX Sound Expander, LCD, Buttons, Speaker and amplifier.
+Turn on and play!
+
+Now the MIDI circuit is done, you will have to remove the Nano each time a new sketch is uploaded.  This is why you were advised to use female header sockets.  You did use them?
+
+
