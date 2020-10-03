@@ -69,108 +69,195 @@ Software
 This project is based on the Teensy MIDI example supplied with the library, the first step is to add the C64 clock signals into OPL.cpp as shown below:  
 
 /**
+
  * Initialize the YM3812.
+ 
  */
+ 
 void OPL2::init() {
+
 	#if BOARD_TYPE == OPL2_BOARD_TYPE_ARDUINO
+	
 		SPI.begin();
+		
 	#else
+	
 		wiringPiSetup();
+		
 		wiringPiSPISetup(SPI_CHANNEL, SPI_SPEED);
+		
 	#endif
+	
 
 	pinMode(pinLatch,   OUTPUT);
+	
 	pinMode(pinAddress, OUTPUT);
+	
 	pinMode(pinReset,   OUTPUT);
+	
 // Added by Sparx266
+
 	pinMode(pinC64clk, OUTPUT);
+	
 // End of added by Sparx266
+
 
 
 	digitalWrite(pinLatch,   HIGH);
+	
 	digitalWrite(pinReset,   HIGH);
+	
 	digitalWrite(pinAddress, LOW);
+	
 // Added by Sparx266
+
 	digitalWrite(pinC64clk,  HIGH);
+	
 // End of added by Sparx266
 
+
 	reset();
+	
 }
 
 
+
 /**
+
  * Hard reset the OPL2 chip. This should be done before sending any register data to the chip.
+ 
  */
+ 
 void OPL2::reset() {
+
 	digitalWrite(pinReset, LOW);
+	
 //Added by Sparx266
+
 	digitalWrite(pinC64clk,  HIGH);
-//End of added by Spar266	
-	delay(1);
-	digitalWrite(pinReset, HIGH);
-//Added by Sparx266
-digitalWrite(pinC64clk,  LOW);
+	
 //End of added by Spar266
+
+	delay(1);
+	
+	digitalWrite(pinReset, HIGH);
+	
+//Added by Sparx266
+
+digitalWrite(pinC64clk,  LOW);
+
+//End of added by Spar266
+
 
 	for(int i = 0; i < 256; i ++) {
+	
 		oplRegisters[i] = 0x00;
+		
 	}
+	
 }
 
 
+
 /**
+
  * Send the given byte of data to the given register of the OPL2 chip.
+ 
  */
+ 
 void OPL2::write(byte reg, byte data) {
+
 	digitalWrite(pinAddress, LOW);
+	
 	#if BOARD_TYPE == OPL2_BOARD_TYPE_ARDUINO
+	
 		SPI.transfer(reg);
+		
 	#else
+	
 		wiringPiSPIDataRW(SPI_CHANNEL, &reg, 1);
+		
 	#endif
+	
 //	digitalWrite(pinLatch, LOW);
+
 //Added by Sparx266
+
 	digitalWrite(pinLatch, HIGH);
+	
 	digitalWrite(pinC64clk,  HIGH);
-//End of added by Spar266
+	
+//End of added by Sparx266
+
 
 	delayMicroseconds(1);
+	
 	//digitalWrite(pinLatch, HIGH);
+	
 //Added by Sparx266
+
 	digitalWrite(pinLatch, LOW);
-//End of added by Spar266	
+	
+//End of added by Sparx266
+
 delayMicroseconds(4);
 
+
 	digitalWrite(pinAddress, HIGH);
+	
 	#if BOARD_TYPE == OPL2_BOARD_TYPE_ARDUINO
+	
 		SPI.transfer(data);
+		
 	#else
+	
 		wiringPiSPIDataRW(SPI_CHANNEL, &data, 1);
+		
 	#endif
+	
 	//digitalWrite(pinLatch, LOW);
+	
 //Added by Sparx266
+
 	digitalWrite(pinLatch, HIGH);
-//End of added by Spar266
+	
+//End of added by Spaxr266
+
 
 	delayMicroseconds(1);
+	
 	//digitalWrite(pinLatch, HIGH);
+	
 //Added by Sparx266
+
 	digitalWrite(pinLatch, LOW);
+	
 	digitalWrite(pinC64clk,  LOW);
-//End of added by Spar266
+	
+//End of added by Sparx266
+
 	
 delayMicroseconds(23);
-} 
+
+}
+
 
 
 Also what’s needed is for the following to be added to OPL.h:
 
 
+
 	#if BOARD_TYPE == OPL2_BOARD_TYPE_ARDUINO
+	
 		#define PIN_LATCH 10
+		
 		#define PIN_ADDR   9
+		
 		#define PIN_RESET  8
-                           #define PIN_C64clk 6
+		
+                #define PIN_C64clk 6
+		
+
 
 That’s it!
 
