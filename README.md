@@ -1,7 +1,6 @@
 # Commodore-64-SFX-Sound-Expander-Arduino-MIDI-V1
 Arduino MIDI interface for C64 SFX Sound Expander V1.0
 
-//<img src=“https://github.com/sparx266/Commodore-64-SFX-Sound-Expander-Arduino-MIDI-V1/blob/main/images/DSC01459.JPG”>
 <img src=“\images\DSC01459.JPG”>
 
 
