@@ -305,9 +305,11 @@ Wire I/O2 and R/W of the C64 connector to Gnd.
 Wire the three lines from the Nano to the ‘595 as per below:
 
 Nano pin    74HC595
-D10        12                
-D11        14                
-D13        11
+D10       ->  12
+
+D11       ->  14
+
+D13       ->  11
 
 Wire the +5V supply to Vin on the Nano.  Also wire Pin 10 of the ‘595 to +5V and Pin 13 (‘595) to Gnd.
 
