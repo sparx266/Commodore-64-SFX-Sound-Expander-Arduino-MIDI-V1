@@ -136,7 +136,7 @@ void OPL2::reset() {
 
 	digitalWrite(pinC64clk,  HIGH);
 	
-//End of added by Spar266
+//End of added by Sparx266
 
 	delay(1);
 	
@@ -146,7 +146,7 @@ void OPL2::reset() {
 
 digitalWrite(pinC64clk,  LOW);
 
-//End of added by Spar266
+//End of added by Sparx266
 
 
 	for(int i = 0; i < 256; i ++) {
@@ -221,7 +221,7 @@ delayMicroseconds(4);
 
 	digitalWrite(pinLatch, HIGH);
 	
-//End of added by Spaxr266
+//End of added by Sparx266
 
 
 	delayMicroseconds(1);
